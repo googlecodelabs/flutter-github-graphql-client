@@ -1,6 +1,8 @@
 # Flutter Github GraphQL Client
 
-A Flutter desktop Github client using Github API v4 (GraphQL)
+A Flutter desktop Github client using Github API v4 (GraphQL). This repository is the code behind the
+[Write a Flutter desktop application](https://codelabs.developers.google.com/codelabs/flutter-github-graphql-client/#0)
+codelab.
 
 ## Github GraphQL Schema generation
  - GitHub's GraphQL Schema is from [GitHub's developer documentation](https://developer.github.com/v4/public_schema/)
