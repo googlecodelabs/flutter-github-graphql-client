@@ -3063,69 +3063,6 @@ class RegenerateEnterpriseIdentityProviderRecoveryCodesInput {
   set enterpriseId(String value) => input['enterpriseId'] = value;
 }
 
-class RegistryPackageDependencyType {
-  const RegistryPackageDependencyType(this.value);
-
-  final String value;
-
-  static const RegistryPackageDependencyType BUNDLED =
-      RegistryPackageDependencyType('BUNDLED');
-
-  static const RegistryPackageDependencyType DEFAULT =
-      RegistryPackageDependencyType('DEFAULT');
-
-  static const RegistryPackageDependencyType DEV =
-      RegistryPackageDependencyType('DEV');
-
-  static const RegistryPackageDependencyType OPTIONAL =
-      RegistryPackageDependencyType('OPTIONAL');
-
-  static const RegistryPackageDependencyType PEER =
-      RegistryPackageDependencyType('PEER');
-
-  static const RegistryPackageDependencyType TEST =
-      RegistryPackageDependencyType('TEST');
-
-  @override
-  int get hashCode => value.hashCode;
-  @override
-  bool operator ==(Object o) =>
-      o is RegistryPackageDependencyType && o.value == value;
-}
-
-class RegistryPackageMetadatum {
-  final Map<String, dynamic> input = <String, dynamic>{};
-
-  set name(String value) => input['name'] = value;
-  set update(bool value) => input['update'] = value;
-  set value(String value) => input['value'] = value;
-}
-
-class RegistryPackageType {
-  const RegistryPackageType(this.value);
-
-  final String value;
-
-  static const RegistryPackageType DEBIAN = RegistryPackageType('DEBIAN');
-
-  static const RegistryPackageType DOCKER = RegistryPackageType('DOCKER');
-
-  static const RegistryPackageType MAVEN = RegistryPackageType('MAVEN');
-
-  static const RegistryPackageType NPM = RegistryPackageType('NPM');
-
-  static const RegistryPackageType NUGET = RegistryPackageType('NUGET');
-
-  static const RegistryPackageType PYTHON = RegistryPackageType('PYTHON');
-
-  static const RegistryPackageType RUBYGEMS = RegistryPackageType('RUBYGEMS');
-
-  @override
-  int get hashCode => value.hashCode;
-  @override
-  bool operator ==(Object o) => o is RegistryPackageType && o.value == value;
-}
-
 class ReleaseOrder {
   final Map<String, dynamic> input = <String, dynamic>{};
 

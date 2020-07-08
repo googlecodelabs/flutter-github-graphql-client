@@ -32,5 +32,7 @@ flutter:
       #   pluginClass: WindowToFrontPlugin
       # ios:
       #   pluginClass: WindowToFrontPlugin
+      linux:
+        pluginClass: WindowToFrontPlugin
       macos:
         pluginClass: WindowToFrontPlugin
