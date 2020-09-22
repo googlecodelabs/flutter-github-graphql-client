@@ -14,7 +14,7 @@
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-import 'package:github_graphql_client/third_party/github_graphql_schema/schema.public.schema.gql.dart'
+import 'package:github_graphql_client/third_party/github_graphql_schema/schema.docs.schema.gql.dart'
     as _i1;
 
 class $ViewerDetail {

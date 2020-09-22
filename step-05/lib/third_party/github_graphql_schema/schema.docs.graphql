@@ -528,9 +528,14 @@ input AddPullRequestReviewThreadInput {
   path: String!
 
   """
+  The node ID of the pull request reviewing
+  """
+  pullRequestId: ID @possibleTypes(concreteTypes: ["PullRequest"])
+
+  """
   The Node ID of the review to modify.
   """
-  pullRequestReviewId: ID! @possibleTypes(concreteTypes: ["PullRequestReview"])
+  pullRequestReviewId: ID @possibleTypes(concreteTypes: ["PullRequestReview"])
 
   """
   The side of the diff on which the line resides. For multi-line comments, this is the side for the end of the line range.
@@ -998,10 +1003,51 @@ type BaseRefChangedEvent implements Node {
   createdAt: DateTime!
 
   """
+  Identifies the name of the base ref for the pull request after it was changed.
+  """
+  currentRefName: String!
+
+  """
   Identifies the primary key from the database.
   """
   databaseId: Int
   id: ID!
+
+  """
+  Identifies the name of the base ref for the pull request before it was changed.
+  """
+  previousRefName: String!
+
+  """
+  PullRequest referenced by event.
+  """
+  pullRequest: PullRequest!
+}
+
+"""
+Represents a 'base_ref_deleted' event on a given pull request.
+"""
+type BaseRefDeletedEvent implements Node {
+  """
+  Identifies the actor who performed the event.
+  """
+  actor: Actor
+
+  """
+  Identifies the name of the Ref associated with the `base_ref_deleted` event.
+  """
+  baseRefName: String
+
+  """
+  Identifies the date and time when the object was created.
+  """
+  createdAt: DateTime!
+  id: ID!
+
+  """
+  PullRequest referenced by event.
+  """
+  pullRequest: PullRequest
 }
 
 """
@@ -1104,13 +1150,9 @@ type Blob implements GitObject & Node {
   id: ID!
 
   """
-  Indicates whether the Blob is binary or text
-
-  **Upcoming Change on 2019-07-01 UTC**
-  **Description:** Type for `isBinary` will change from `Boolean!` to `Boolean`.
-  **Reason:** The `isBinary` field may return `null` when it cannot determine if a Blob is binary.
+  Indicates whether the Blob is binary or text. Returns null if unable to determine the encoding.
   """
-  isBinary: Boolean!
+  isBinary: Boolean
 
   """
   Indicates whether the contents is truncated
@@ -2727,6 +2769,11 @@ enum CommentAuthorAssociation {
   FIRST_TIME_CONTRIBUTOR
 
   """
+  Author is a placeholder for an unclaimed user.
+  """
+  MANNEQUIN
+
+  """
   Author is a member of the organization that owns the repository.
   """
   MEMBER
@@ -2800,6 +2847,11 @@ type CommentDeletedEvent implements Node {
   Identifies the primary key from the database.
   """
   databaseId: Int
+
+  """
+  The user who authored the deleted comment.
+  """
+  deletedCommentAuthor: Actor
   id: ID!
 }
 
@@ -2996,6 +3048,16 @@ type Commit implements GitObject & Node & Subscribable & UniformResourceLocatabl
     """
     orderBy: DeploymentOrder = {field: CREATED_AT, direction: ASC}
   ): DeploymentConnection
+
+  """
+  The tree entry representing the file located at the given path.
+  """
+  file(
+    """
+    The path for the file
+    """
+    path: String!
+  ): TreeEntry
 
   """
   The linear commit history starting from (and including) this commit, in the same order as `git log`.
@@ -4913,6 +4975,11 @@ input CreateIssueInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The name of an issue template in the repository, assigns labels and assignees from the template to the issue
+  """
+  issueTemplate: String
 
   """
   An array of Node IDs of labels for this issue.
@@ -7716,7 +7783,7 @@ type EnterpriseMemberEdge {
   """
   Whether the user does not have a license for the enterprise.
   """
-  isUnlicensed: Boolean!
+  isUnlicensed: Boolean! @deprecated(reason: "All members consume a license Removal on 2021-01-01 UTC.")
 
   """
   The item at the end of the edge.
@@ -7881,7 +7948,7 @@ type EnterpriseOutsideCollaboratorEdge {
   """
   Whether the outside collaborator does not have a license for the enterprise.
   """
-  isUnlicensed: Boolean!
+  isUnlicensed: Boolean! @deprecated(reason: "All outside collaborators consume a license Removal on 2021-01-01 UTC.")
 
   """
   The item at the end of the edge.
@@ -8907,7 +8974,7 @@ type EnterprisePendingCollaboratorEdge {
   """
   Whether the invited collaborator does not have a license for the enterprise.
   """
-  isUnlicensed: Boolean!
+  isUnlicensed: Boolean! @deprecated(reason: "All pending collaborators consume a license Removal on 2021-01-01 UTC.")
 
   """
   The item at the end of the edge.
@@ -8987,7 +9054,7 @@ type EnterprisePendingMemberInvitationEdge {
   """
   Whether the invitation has a license for the enterprise.
   """
-  isUnlicensed: Boolean!
+  isUnlicensed: Boolean! @deprecated(reason: "All pending members consume a license Removal on 2020-07-01 UTC.")
 
   """
   The item at the end of the edge.
@@ -9828,15 +9895,60 @@ SAML attributes for the External Identity
 """
 type ExternalIdentitySamlAttributes {
   """
+  The emails associated with the SAML identity
+  """
+  emails: [UserEmailMetadata!]
+
+  """
+  Family name of the SAML identity
+  """
+  familyName: String
+
+  """
+  Given name of the SAML identity
+  """
+  givenName: String
+
+  """
+  The groups linked to this identity in IDP
+  """
+  groups: [String!]
+
+  """
   The NameID of the SAML identity
   """
   nameId: String
+
+  """
+  The userName of the SAML identity
+  """
+  username: String
 }
 
 """
 SCIM attributes for the External Identity
 """
 type ExternalIdentityScimAttributes {
+  """
+  The emails associated with the SCIM identity
+  """
+  emails: [UserEmailMetadata!]
+
+  """
+  Family name of the SCIM identity
+  """
+  familyName: String
+
+  """
+  Given name of the SCIM identity
+  """
+  givenName: String
+
+  """
+  The groups linked to this identity in IDP
+  """
+  groups: [String!]
+
   """
   The userName of the SCIM identity
   """
@@ -12014,6 +12126,31 @@ enum IssueState {
 }
 
 """
+A repository issue template.
+"""
+type IssueTemplate {
+  """
+  The template purpose.
+  """
+  about: String
+
+  """
+  The suggested issue body.
+  """
+  body: String
+
+  """
+  The template name.
+  """
+  name: String!
+
+  """
+  The suggested issue title.
+  """
+  title: String
+}
+
+"""
 The connection type for IssueTimelineItem.
 """
 type IssueTimelineConnection {
@@ -12960,6 +13097,41 @@ type Mannequin implements Actor & Node & UniformResourceLocatable {
 }
 
 """
+Autogenerated input type of MarkFileAsViewed
+"""
+input MarkFileAsViewedInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  """
+  The path of the file to mark as viewed
+  """
+  path: String!
+
+  """
+  The Node ID of the pull request.
+  """
+  pullRequestId: ID! @possibleTypes(concreteTypes: ["PullRequest"])
+}
+
+"""
+Autogenerated return type of MarkFileAsViewed
+"""
+type MarkFileAsViewedPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  """
+  The updated pull request.
+  """
+  pullRequest: PullRequest
+}
+
+"""
 Autogenerated input type of MarkPullRequestReadyForReview
 """
 input MarkPullRequestReadyForReviewInput {
@@ -12999,10 +13171,25 @@ type MarkedAsDuplicateEvent implements Node {
   actor: Actor
 
   """
+  The authoritative issue or pull request which has been duplicated by another.
+  """
+  canonical: IssueOrPullRequest
+
+  """
   Identifies the date and time when the object was created.
   """
   createdAt: DateTime!
+
+  """
+  The issue or pull request which has been marked as a duplicate of another.
+  """
+  duplicate: IssueOrPullRequest
   id: ID!
+
+  """
+  Canonical and duplicate belong to different repositories.
+  """
+  isCrossRepository: Boolean!
 }
 
 """
@@ -13758,6 +13945,11 @@ Autogenerated input type of MergeBranch
 """
 input MergeBranchInput {
   """
+  The email address to associate with this commit.
+  """
+  authorEmail: String
+
+  """
   The name of the base branch that the provided head will be merged into.
   """
   base: String!
@@ -13802,6 +13994,11 @@ type MergeBranchPayload {
 Autogenerated input type of MergePullRequest
 """
 input MergePullRequestInput {
+  """
+  The email address to associate with this merge.
+  """
+  authorEmail: String
+
   """
   A unique identifier for the client performing the mutation.
   """
@@ -13880,7 +14077,7 @@ enum MergeStateStatus {
   """
   The merge is blocked due to the pull request being a draft.
   """
-  DRAFT
+  DRAFT @deprecated(reason: "DRAFT state will be removed from this enum and `isDraft` should be used instead Use PullRequest.isDraft instead. Removal on 2021-01-01 UTC.")
 
   """
   Mergeable with passing commit status and pre-receive hooks.
@@ -14732,6 +14929,11 @@ type Mutation {
   lockLockable(input: LockLockableInput!): LockLockablePayload
 
   """
+  Mark a pull request file as viewed
+  """
+  markFileAsViewed(input: MarkFileAsViewedInput!): MarkFileAsViewedPayload
+
+  """
   Marks a pull request ready for review.
   """
   markPullRequestReadyForReview(input: MarkPullRequestReadyForReviewInput!): MarkPullRequestReadyForReviewPayload
@@ -14870,6 +15072,11 @@ type Mutation {
   Unlock a lockable object
   """
   unlockLockable(input: UnlockLockableInput!): UnlockLockablePayload
+
+  """
+  Unmark a pull request file as viewed
+  """
+  unmarkFileAsViewed(input: UnmarkFileAsViewedInput!): UnmarkFileAsViewedPayload
 
   """
   Unmark an issue as a duplicate of another issue.
@@ -18164,9 +18371,39 @@ enum OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility {
   ALL
 
   """
+  All organization members are restricted from creating internal repositories.
+  """
+  INTERNAL
+
+  """
+  All organization members are allowed to create any repositories.
+  """
+  NONE
+
+  """
+  All organization members are restricted from creating private repositories.
+  """
+  PRIVATE
+
+  """
+  All organization members are restricted from creating private or internal repositories.
+  """
+  PRIVATE_INTERNAL
+
+  """
   All organization members are restricted from creating public repositories.
   """
   PUBLIC
+
+  """
+  All organization members are restricted from creating public or internal repositories.
+  """
+  PUBLIC_INTERNAL
+
+  """
+  All organization members are restricted from creating public or private repositories.
+  """
+  PUBLIC_PRIVATE
 }
 
 """
@@ -21682,6 +21919,61 @@ type PullRequest implements Assignable & Closable & Comment & Labelable & Lockab
   lastEditedAt: DateTime
 
   """
+  A list of latest reviews per user associated with the pull request.
+  """
+  latestOpinionatedReviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Only return reviews from user who have write access to the repository
+    """
+    writersOnly: Boolean = false
+  ): PullRequestReviewConnection
+
+  """
+  A list of latest reviews per user associated with the pull request that are not also pending review.
+  """
+  latestReviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): PullRequestReviewConnection
+
+  """
   `true` if the pull request is locked
   """
   locked: Boolean!
@@ -22080,6 +22372,11 @@ type PullRequest implements Assignable & Closable & Comment & Labelable & Lockab
   viewerCanApplySuggestion: Boolean!
 
   """
+  Check if the viewer can restore the deleted head ref.
+  """
+  viewerCanDeleteHeadRef: Boolean!
+
+  """
   Can user react to this subject
   """
   viewerCanReact: Boolean!
@@ -22103,6 +22400,26 @@ type PullRequest implements Assignable & Closable & Comment & Labelable & Lockab
   Did the viewer author this comment.
   """
   viewerDidAuthor: Boolean!
+
+  """
+  The merge body text for the viewer and method.
+  """
+  viewerMergeBodyText(
+    """
+    The merge method for the message.
+    """
+    mergeType: PullRequestMergeMethod
+  ): String!
+
+  """
+  The merge headline text for the viewer and method.
+  """
+  viewerMergeHeadlineText(
+    """
+    The merge method for the message.
+    """
+    mergeType: PullRequestMergeMethod
+  ): String!
 
   """
   Identifies if the viewer is watching, not watching, or ignoring the subscribable entity.
@@ -22435,6 +22752,11 @@ type PullRequestReview implements Comment & Deletable & Node & Reactable & Repos
   Author's association with the subject of the comment.
   """
   authorAssociation: CommentAuthorAssociation!
+
+  """
+  Indicates whether the author of this review has push access to the repository.
+  """
+  authorCanPushToRepository: Boolean!
 
   """
   Identifies the pull request review body.
@@ -23170,6 +23492,16 @@ type PullRequestReviewThread implements Node {
   id: ID!
 
   """
+  Whether or not the thread has been collapsed (outdated or resolved)
+  """
+  isCollapsed: Boolean!
+
+  """
+  Indicates whether this thread was outdated by newer changes.
+  """
+  isOutdated: Boolean!
+
+  """
   Whether this thread has been resolved
   """
   isResolved: Boolean!
@@ -23188,6 +23520,11 @@ type PullRequestReviewThread implements Node {
   The original start line in the file to which this thread refers (multi-line only).
   """
   originalStartLine: Int
+
+  """
+  Identifies the file path of this thread.
+  """
+  path: String!
 
   """
   Identifies the pull request associated with this thread.
@@ -23213,6 +23550,11 @@ type PullRequestReviewThread implements Node {
   The start line in the file to which this thread refers (multi-line only)
   """
   startLine: Int
+
+  """
+  Indicates whether the current viewer can reply to this thread.
+  """
+  viewerCanReply: Boolean!
 
   """
   Whether or not the viewer can resolve this thread
@@ -23333,7 +23675,7 @@ type PullRequestTimelineConnection {
 """
 An item in an pull request timeline
 """
-union PullRequestTimelineItem = AssignedEvent | BaseRefForcePushedEvent | ClosedEvent | Commit | CommitCommentThread | CrossReferencedEvent | DemilestonedEvent | DeployedEvent | DeploymentEnvironmentChangedEvent | HeadRefDeletedEvent | HeadRefForcePushedEvent | HeadRefRestoredEvent | IssueComment | LabeledEvent | LockedEvent | MergedEvent | MilestonedEvent | PullRequestReview | PullRequestReviewComment | PullRequestReviewThread | ReferencedEvent | RenamedTitleEvent | ReopenedEvent | ReviewDismissedEvent | ReviewRequestRemovedEvent | ReviewRequestedEvent | SubscribedEvent | UnassignedEvent | UnlabeledEvent | UnlockedEvent | UnsubscribedEvent | UserBlockedEvent
+union PullRequestTimelineItem = AssignedEvent | BaseRefDeletedEvent | BaseRefForcePushedEvent | ClosedEvent | Commit | CommitCommentThread | CrossReferencedEvent | DemilestonedEvent | DeployedEvent | DeploymentEnvironmentChangedEvent | HeadRefDeletedEvent | HeadRefForcePushedEvent | HeadRefRestoredEvent | IssueComment | LabeledEvent | LockedEvent | MergedEvent | MilestonedEvent | PullRequestReview | PullRequestReviewComment | PullRequestReviewThread | ReferencedEvent | RenamedTitleEvent | ReopenedEvent | ReviewDismissedEvent | ReviewRequestRemovedEvent | ReviewRequestedEvent | SubscribedEvent | UnassignedEvent | UnlabeledEvent | UnlockedEvent | UnsubscribedEvent | UserBlockedEvent
 
 """
 An edge in a connection.
@@ -23353,7 +23695,7 @@ type PullRequestTimelineItemEdge {
 """
 An item in a pull request timeline
 """
-union PullRequestTimelineItems = AddedToProjectEvent | AssignedEvent | AutomaticBaseChangeFailedEvent | AutomaticBaseChangeSucceededEvent | BaseRefChangedEvent | BaseRefForcePushedEvent | ClosedEvent | CommentDeletedEvent | ConnectedEvent | ConvertToDraftEvent | ConvertedNoteToIssueEvent | CrossReferencedEvent | DemilestonedEvent | DeployedEvent | DeploymentEnvironmentChangedEvent | DisconnectedEvent | HeadRefDeletedEvent | HeadRefForcePushedEvent | HeadRefRestoredEvent | IssueComment | LabeledEvent | LockedEvent | MarkedAsDuplicateEvent | MentionedEvent | MergedEvent | MilestonedEvent | MovedColumnsInProjectEvent | PinnedEvent | PullRequestCommit | PullRequestCommitCommentThread | PullRequestReview | PullRequestReviewThread | PullRequestRevisionMarker | ReadyForReviewEvent | ReferencedEvent | RemovedFromProjectEvent | RenamedTitleEvent | ReopenedEvent | ReviewDismissedEvent | ReviewRequestRemovedEvent | ReviewRequestedEvent | SubscribedEvent | TransferredEvent | UnassignedEvent | UnlabeledEvent | UnlockedEvent | UnmarkedAsDuplicateEvent | UnpinnedEvent | UnsubscribedEvent | UserBlockedEvent
+union PullRequestTimelineItems = AddedToProjectEvent | AssignedEvent | AutomaticBaseChangeFailedEvent | AutomaticBaseChangeSucceededEvent | BaseRefChangedEvent | BaseRefDeletedEvent | BaseRefForcePushedEvent | ClosedEvent | CommentDeletedEvent | ConnectedEvent | ConvertToDraftEvent | ConvertedNoteToIssueEvent | CrossReferencedEvent | DemilestonedEvent | DeployedEvent | DeploymentEnvironmentChangedEvent | DisconnectedEvent | HeadRefDeletedEvent | HeadRefForcePushedEvent | HeadRefRestoredEvent | IssueComment | LabeledEvent | LockedEvent | MarkedAsDuplicateEvent | MentionedEvent | MergedEvent | MilestonedEvent | MovedColumnsInProjectEvent | PinnedEvent | PullRequestCommit | PullRequestCommitCommentThread | PullRequestReview | PullRequestReviewThread | PullRequestRevisionMarker | ReadyForReviewEvent | ReferencedEvent | RemovedFromProjectEvent | RenamedTitleEvent | ReopenedEvent | ReviewDismissedEvent | ReviewRequestRemovedEvent | ReviewRequestedEvent | SubscribedEvent | TransferredEvent | UnassignedEvent | UnlabeledEvent | UnlockedEvent | UnmarkedAsDuplicateEvent | UnpinnedEvent | UnsubscribedEvent | UserBlockedEvent
 
 """
 The connection type for PullRequestTimelineItems.
@@ -23438,6 +23780,11 @@ enum PullRequestTimelineItemsItemType {
   Represents a 'base_ref_changed' event on a given issue or pull request.
   """
   BASE_REF_CHANGED_EVENT
+
+  """
+  Represents a 'base_ref_deleted' event on a given pull request.
+  """
+  BASE_REF_DELETED_EVENT
 
   """
   Represents a 'base_ref_force_pushed' event on a given pull request.
@@ -24253,6 +24600,11 @@ type RateLimit {
   The time at which the current rate limit window resets in UTC epoch seconds.
   """
   resetAt: DateTime!
+
+  """
+  The number of points used in the current rate limit window.
+  """
+  used: Int!
 }
 
 """
@@ -24650,13 +25002,9 @@ type Ref implements Node {
   repository: Repository!
 
   """
-  The object the ref points to.
-
-  **Upcoming Change on 2019-07-01 UTC**
-  **Description:** Type for `target` will change from `GitObject!` to `GitObject`.
-  **Reason:** The `target` field may return `null` values and is changing to nullable
+  The object the ref points to. Returns null when object does not exist.
   """
-  target: GitObject!
+  target: GitObject
 }
 
 """
@@ -28034,6 +28382,11 @@ type Repository implements Node & PackageOwner & ProjectOwner & RepositoryInfo &
   ): CommitCommentConnection!
 
   """
+  Returns a list of contact links associated to the repository
+  """
+  contactLinks: [RepositoryContactLink!]
+
+  """
   Identifies the date and time when the object was created.
   """
   createdAt: DateTime!
@@ -28259,9 +28612,19 @@ type Repository implements Node & PackageOwner & ProjectOwner & RepositoryInfo &
   isArchived: Boolean!
 
   """
+  Returns true if blank issue creation is allowed
+  """
+  isBlankIssuesEnabled: Boolean!
+
+  """
   Returns whether or not this repository disabled.
   """
   isDisabled: Boolean!
+
+  """
+  Returns whether or not this repository is empty.
+  """
+  isEmpty: Boolean!
 
   """
   Identifies if the repository is a fork.
@@ -28282,6 +28645,11 @@ type Repository implements Node & PackageOwner & ProjectOwner & RepositoryInfo &
   Identifies if the repository is private.
   """
   isPrivate: Boolean!
+
+  """
+  Returns true if this repository has a security policy
+  """
+  isSecurityPolicyEnabled: Boolean
 
   """
   Identifies if the repository is a template that can be used to generate new repositories.
@@ -28307,6 +28675,11 @@ type Repository implements Node & PackageOwner & ProjectOwner & RepositoryInfo &
     """
     number: Int!
   ): IssueOrPullRequest
+
+  """
+  Returns a list of issue templates associated to the repository
+  """
+  issueTemplates: [IssueTemplate!]
 
   """
   A list of issues that have been opened in the repository.
@@ -28511,6 +28884,11 @@ type Repository implements Node & PackageOwner & ProjectOwner & RepositoryInfo &
     Ordering options for milestones.
     """
     orderBy: MilestoneOrder
+
+    """
+    Filters milestones with a query on the title
+    """
+    query: String
 
     """
     Filter by the state of the milestones.
@@ -28895,6 +29273,11 @@ type Repository implements Node & PackageOwner & ProjectOwner & RepositoryInfo &
   resourcePath: URI!
 
   """
+  The security policy URL.
+  """
+  securityPolicyUrl: URI
+
+  """
   A description of the repository, rendered to HTML without any links in it.
   """
   shortDescriptionHTML(
@@ -29016,6 +29399,16 @@ type Repository implements Node & PackageOwner & ProjectOwner & RepositoryInfo &
   viewerCanUpdateTopics: Boolean!
 
   """
+  The last commit email for the viewer.
+  """
+  viewerDefaultCommitEmail: String
+
+  """
+  The last used merge method by the viewer or the default for the repository.
+  """
+  viewerDefaultMergeMethod: PullRequestMergeMethod!
+
+  """
   Returns a boolean indicating whether the viewing user has starred this starrable.
   """
   viewerHasStarred: Boolean!
@@ -29024,6 +29417,11 @@ type Repository implements Node & PackageOwner & ProjectOwner & RepositoryInfo &
   The users permission level on the repository. Will return null if authenticated as an GitHub App.
   """
   viewerPermission: RepositoryPermission
+
+  """
+  A list of emails this viewer can commit with.
+  """
+  viewerPossibleCommitEmails: [String!]
 
   """
   Identifies if the viewer is watching, not watching, or ignoring the subscribable entity.
@@ -29205,6 +29603,26 @@ type RepositoryConnection {
   The total size in kilobytes of all repositories in the connection.
   """
   totalDiskUsage: Int!
+}
+
+"""
+A repository contact link.
+"""
+type RepositoryContactLink {
+  """
+  The contact link purpose.
+  """
+  about: String!
+
+  """
+  The contact link name.
+  """
+  name: String!
+
+  """
+  The contact link URL.
+  """
+  url: URI!
 }
 
 """
@@ -34576,6 +34994,16 @@ Represents a Git tree entry.
 """
 type TreeEntry {
   """
+  The extension of the file
+  """
+  extension: String
+
+  """
+  Whether or not this tree entry is generated
+  """
+  isGenerated: Boolean!
+
+  """
   Entry file mode.
   """
   mode: Int!
@@ -34594,6 +35022,11 @@ type TreeEntry {
   Entry file Git object ID.
   """
   oid: GitObjectID!
+
+  """
+  The full path of the file.
+  """
+  path: String
 
   """
   The Repository the tree entry belongs to
@@ -34886,6 +35319,41 @@ type UnlockedEvent implements Node {
 }
 
 """
+Autogenerated input type of UnmarkFileAsViewed
+"""
+input UnmarkFileAsViewedInput {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  """
+  The path of the file to mark as unviewed
+  """
+  path: String!
+
+  """
+  The Node ID of the pull request.
+  """
+  pullRequestId: ID! @possibleTypes(concreteTypes: ["PullRequest"])
+}
+
+"""
+Autogenerated return type of UnmarkFileAsViewed
+"""
+type UnmarkFileAsViewedPayload {
+  """
+  A unique identifier for the client performing the mutation.
+  """
+  clientMutationId: String
+
+  """
+  The updated pull request.
+  """
+  pullRequest: PullRequest
+}
+
+"""
 Autogenerated input type of UnmarkIssueAsDuplicate
 """
 input UnmarkIssueAsDuplicateInput {
@@ -34930,10 +35398,25 @@ type UnmarkedAsDuplicateEvent implements Node {
   actor: Actor
 
   """
+  The authoritative issue or pull request which has been duplicated by another.
+  """
+  canonical: IssueOrPullRequest
+
+  """
   Identifies the date and time when the object was created.
   """
   createdAt: DateTime!
+
+  """
+  The issue or pull request which has been marked as a duplicate of another.
+  """
+  duplicate: IssueOrPullRequest
   id: ID!
+
+  """
+  Canonical and duplicate belong to different repositories.
+  """
+  isCrossRepository: Boolean!
 }
 
 """
@@ -38101,6 +38584,26 @@ type UserEdge {
   The item at the end of the edge.
   """
   node: User
+}
+
+"""
+Email attributes from External Identity
+"""
+type UserEmailMetadata {
+  """
+  Boolean to identify primary emails
+  """
+  primary: Boolean
+
+  """
+  Type of email
+  """
+  type: String
+
+  """
+  Email id
+  """
+  value: String!
 }
 
 """

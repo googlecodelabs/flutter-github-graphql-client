@@ -114,6 +114,7 @@ class AddPullRequestReviewThreadInput {
   set clientMutationId(String value) => input['clientMutationId'] = value;
   set line(int value) => input['line'] = value;
   set path(String value) => input['path'] = value;
+  set pullRequestId(String value) => input['pullRequestId'] = value;
   set pullRequestReviewId(String value) => input['pullRequestReviewId'] = value;
   set side(DiffSide value) => input['side'] = value.value;
   set startLine(int value) => input['startLine'] = value;
@@ -416,6 +417,9 @@ class CommentAuthorAssociation {
   static const CommentAuthorAssociation FIRST_TIME_CONTRIBUTOR =
       CommentAuthorAssociation('FIRST_TIME_CONTRIBUTOR');
 
+  static const CommentAuthorAssociation MANNEQUIN =
+      CommentAuthorAssociation('MANNEQUIN');
+
   static const CommentAuthorAssociation MEMBER =
       CommentAuthorAssociation('MEMBER');
 
@@ -633,6 +637,7 @@ class CreateIssueInput {
   set assigneeIds(List<String> value) => input['assigneeIds'] = value;
   set body(String value) => input['body'] = value;
   set clientMutationId(String value) => input['clientMutationId'] = value;
+  set issueTemplate(String value) => input['issueTemplate'] = value;
   set labelIds(List<String> value) => input['labelIds'] = value;
   set milestoneId(String value) => input['milestoneId'] = value;
   set projectIds(List<String> value) => input['projectIds'] = value;
@@ -1842,6 +1847,14 @@ class LockReason {
   bool operator ==(Object o) => o is LockReason && o.value == value;
 }
 
+class MarkFileAsViewedInput {
+  final Map<String, dynamic> input = <String, dynamic>{};
+
+  set clientMutationId(String value) => input['clientMutationId'] = value;
+  set path(String value) => input['path'] = value;
+  set pullRequestId(String value) => input['pullRequestId'] = value;
+}
+
 class MarkPullRequestReadyForReviewInput {
   final Map<String, dynamic> input = <String, dynamic>{};
 
@@ -1852,6 +1865,7 @@ class MarkPullRequestReadyForReviewInput {
 class MergeBranchInput {
   final Map<String, dynamic> input = <String, dynamic>{};
 
+  set authorEmail(String value) => input['authorEmail'] = value;
   set base(String value) => input['base'] = value;
   set clientMutationId(String value) => input['clientMutationId'] = value;
   set commitMessage(String value) => input['commitMessage'] = value;
@@ -1862,6 +1876,7 @@ class MergeBranchInput {
 class MergePullRequestInput {
   final Map<String, dynamic> input = <String, dynamic>{};
 
+  set authorEmail(String value) => input['authorEmail'] = value;
   set clientMutationId(String value) => input['clientMutationId'] = value;
   set commitBody(String value) => input['commitBody'] = value;
   set commitHeadline(String value) => input['commitHeadline'] = value;
@@ -2276,8 +2291,36 @@ class OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility {
       OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility('ALL');
 
   static const OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility
+      INTERNAL =
+      OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility(
+          'INTERNAL');
+
+  static const OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility
+      NONE =
+      OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility('NONE');
+
+  static const OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility
+      PRIVATE = OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility(
+          'PRIVATE');
+
+  static const OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility
+      PRIVATE_INTERNAL =
+      OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility(
+          'PRIVATE_INTERNAL');
+
+  static const OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility
       PUBLIC =
       OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility('PUBLIC');
+
+  static const OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility
+      PUBLIC_INTERNAL =
+      OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility(
+          'PUBLIC_INTERNAL');
+
+  static const OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility
+      PUBLIC_PRIVATE =
+      OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility(
+          'PUBLIC_PRIVATE');
 
   @override
   int get hashCode => value.hashCode;
@@ -2818,6 +2861,9 @@ class PullRequestTimelineItemsItemType {
 
   static const PullRequestTimelineItemsItemType BASE_REF_CHANGED_EVENT =
       PullRequestTimelineItemsItemType('BASE_REF_CHANGED_EVENT');
+
+  static const PullRequestTimelineItemsItemType BASE_REF_DELETED_EVENT =
+      PullRequestTimelineItemsItemType('BASE_REF_DELETED_EVENT');
 
   static const PullRequestTimelineItemsItemType BASE_REF_FORCE_PUSHED_EVENT =
       PullRequestTimelineItemsItemType('BASE_REF_FORCE_PUSHED_EVENT');
@@ -4181,6 +4227,14 @@ class UnlockLockableInput {
 
   set clientMutationId(String value) => input['clientMutationId'] = value;
   set lockableId(String value) => input['lockableId'] = value;
+}
+
+class UnmarkFileAsViewedInput {
+  final Map<String, dynamic> input = <String, dynamic>{};
+
+  set clientMutationId(String value) => input['clientMutationId'] = value;
+  set path(String value) => input['path'] = value;
+  set pullRequestId(String value) => input['pullRequestId'] = value;
 }
 
 class UnmarkIssueAsDuplicateInput {

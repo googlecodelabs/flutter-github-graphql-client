@@ -817,6 +817,23 @@ const AddPullRequestReviewThreadInput = _i1.InputObjectTypeDefinitionNode(
               name: _i1.NameNode(value: 'String'), isNonNull: true),
           defaultValue: null),
       _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'pullRequestId'),
+          directives: [
+            _i1.DirectiveNode(
+                name: _i1.NameNode(value: 'possibleTypes'),
+                arguments: [
+                  _i1.ArgumentNode(
+                      name: _i1.NameNode(value: 'concreteTypes'),
+                      value: _i1.ListValueNode(values: [
+                        _i1.StringValueNode(
+                            value: 'PullRequest', isBlock: false)
+                      ]))
+                ])
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'ID'), isNonNull: false),
+          defaultValue: null),
+      _i1.InputValueDefinitionNode(
           name: _i1.NameNode(value: 'pullRequestReviewId'),
           directives: [
             _i1.DirectiveNode(
@@ -831,7 +848,7 @@ const AddPullRequestReviewThreadInput = _i1.InputObjectTypeDefinitionNode(
                 ])
           ],
           type: _i1.NamedTypeNode(
-              name: _i1.NameNode(value: 'ID'), isNonNull: true),
+              name: _i1.NameNode(value: 'ID'), isNonNull: false),
           defaultValue: null),
       _i1.InputValueDefinitionNode(
           name: _i1.NameNode(value: 'side'),
@@ -1516,6 +1533,12 @@ const BaseRefChangedEvent = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'DateTime'), isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'currentRefName'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'databaseId'),
           directives: [],
           args: [],
@@ -1526,7 +1549,57 @@ const BaseRefChangedEvent = _i1.ObjectTypeDefinitionNode(
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
-              name: _i1.NameNode(value: 'ID'), isNonNull: true))
+              name: _i1.NameNode(value: 'ID'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'previousRefName'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'pullRequest'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'PullRequest'), isNonNull: true))
+    ]);
+const BaseRefDeletedEvent = _i1.ObjectTypeDefinitionNode(
+    name: _i1.NameNode(value: 'BaseRefDeletedEvent'),
+    directives: [],
+    interfaces: [
+      _i1.NamedTypeNode(name: _i1.NameNode(value: 'Node'), isNonNull: false)
+    ],
+    fields: [
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'actor'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Actor'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'baseRefName'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'createdAt'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'DateTime'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'id'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'ID'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'pullRequest'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'PullRequest'), isNonNull: false))
     ]);
 const BaseRefForcePushedEvent = _i1.ObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'BaseRefForcePushedEvent'),
@@ -1666,7 +1739,7 @@ const Blob = _i1.ObjectTypeDefinitionNode(
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
-              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'isTruncated'),
           directives: [],
@@ -3889,6 +3962,8 @@ const CommentAuthorAssociation = _i1.EnumTypeDefinitionNode(
       _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'FIRST_TIME_CONTRIBUTOR'), directives: []),
       _i1.EnumValueDefinitionNode(
+          name: _i1.NameNode(value: 'MANNEQUIN'), directives: []),
+      _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'MEMBER'), directives: []),
       _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'NONE'), directives: []),
@@ -3939,6 +4014,12 @@ const CommentDeletedEvent = _i1.ObjectTypeDefinitionNode(
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Int'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'deletedCommentAuthor'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Actor'), isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'id'),
           directives: [],
@@ -4227,6 +4308,19 @@ const Commit = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'DeploymentConnection'),
               isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'file'),
+          directives: [],
+          args: [
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'path'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'String'), isNonNull: true),
+                defaultValue: null)
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'TreeEntry'), isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'history'),
           directives: [],
@@ -6890,6 +6984,12 @@ const CreateIssueInput = _i1.InputObjectTypeDefinitionNode(
           defaultValue: null),
       _i1.InputValueDefinitionNode(
           name: _i1.NameNode(value: 'clientMutationId'),
+          directives: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false),
+          defaultValue: null),
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'issueTemplate'),
           directives: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'String'), isNonNull: false),
@@ -10731,7 +10831,18 @@ const EnterpriseMemberEdge = _i1.ObjectTypeDefinitionNode(
               name: _i1.NameNode(value: 'String'), isNonNull: true)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'isUnlicensed'),
-          directives: [],
+          directives: [
+            _i1.DirectiveNode(
+                name: _i1.NameNode(value: 'deprecated'),
+                arguments: [
+                  _i1.ArgumentNode(
+                      name: _i1.NameNode(value: 'reason'),
+                      value: _i1.StringValueNode(
+                          value:
+                              'All members consume a license Removal on 2021-01-01 UTC.',
+                          isBlock: false))
+                ])
+          ],
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
@@ -10907,7 +11018,18 @@ const EnterpriseOutsideCollaboratorEdge = _i1.ObjectTypeDefinitionNode(
               name: _i1.NameNode(value: 'String'), isNonNull: true)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'isUnlicensed'),
-          directives: [],
+          directives: [
+            _i1.DirectiveNode(
+                name: _i1.NameNode(value: 'deprecated'),
+                arguments: [
+                  _i1.ArgumentNode(
+                      name: _i1.NameNode(value: 'reason'),
+                      value: _i1.StringValueNode(
+                          value:
+                              'All outside collaborators consume a license Removal on 2021-01-01 UTC.',
+                          isBlock: false))
+                ])
+          ],
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
@@ -12495,7 +12617,18 @@ const EnterprisePendingCollaboratorEdge = _i1.ObjectTypeDefinitionNode(
               name: _i1.NameNode(value: 'String'), isNonNull: true)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'isUnlicensed'),
-          directives: [],
+          directives: [
+            _i1.DirectiveNode(
+                name: _i1.NameNode(value: 'deprecated'),
+                arguments: [
+                  _i1.ArgumentNode(
+                      name: _i1.NameNode(value: 'reason'),
+                      value: _i1.StringValueNode(
+                          value:
+                              'All pending collaborators consume a license Removal on 2021-01-01 UTC.',
+                          isBlock: false))
+                ])
+          ],
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
@@ -12612,7 +12745,18 @@ const EnterprisePendingMemberInvitationEdge = _i1.ObjectTypeDefinitionNode(
               name: _i1.NameNode(value: 'String'), isNonNull: true)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'isUnlicensed'),
-          directives: [],
+          directives: [
+            _i1.DirectiveNode(
+                name: _i1.NameNode(value: 'deprecated'),
+                arguments: [
+                  _i1.ArgumentNode(
+                      name: _i1.NameNode(value: 'reason'),
+                      value: _i1.StringValueNode(
+                          value:
+                              'All pending members consume a license Removal on 2020-07-01 UTC.',
+                          isBlock: false))
+                ])
+          ],
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
@@ -13732,7 +13876,42 @@ const ExternalIdentitySamlAttributes = _i1.ObjectTypeDefinitionNode(
     interfaces: [],
     fields: [
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'emails'),
+          directives: [],
+          args: [],
+          type: _i1.ListTypeNode(
+              type: _i1.NamedTypeNode(
+                  name: _i1.NameNode(value: 'UserEmailMetadata'),
+                  isNonNull: true),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'familyName'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'givenName'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'groups'),
+          directives: [],
+          args: [],
+          type: _i1.ListTypeNode(
+              type: _i1.NamedTypeNode(
+                  name: _i1.NameNode(value: 'String'), isNonNull: true),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'nameId'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'username'),
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
@@ -13743,6 +13922,35 @@ const ExternalIdentityScimAttributes = _i1.ObjectTypeDefinitionNode(
     directives: [],
     interfaces: [],
     fields: [
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'emails'),
+          directives: [],
+          args: [],
+          type: _i1.ListTypeNode(
+              type: _i1.NamedTypeNode(
+                  name: _i1.NameNode(value: 'UserEmailMetadata'),
+                  isNonNull: true),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'familyName'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'givenName'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'groups'),
+          directives: [],
+          args: [],
+          type: _i1.ListTypeNode(
+              type: _i1.NamedTypeNode(
+                  name: _i1.NameNode(value: 'String'), isNonNull: true),
+              isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'username'),
           directives: [],
@@ -16417,6 +16625,36 @@ const IssueState = _i1.EnumTypeDefinitionNode(
       _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'OPEN'), directives: [])
     ]);
+const IssueTemplate = _i1.ObjectTypeDefinitionNode(
+    name: _i1.NameNode(value: 'IssueTemplate'),
+    directives: [],
+    interfaces: [],
+    fields: [
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'about'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'body'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'name'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'title'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false))
+    ]);
 const IssueTimelineConnection = _i1.ObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'IssueTimelineConnection'),
     directives: [],
@@ -17641,6 +17879,58 @@ const Mannequin = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'URI'), isNonNull: true))
     ]);
+const MarkFileAsViewedInput = _i1.InputObjectTypeDefinitionNode(
+    name: _i1.NameNode(value: 'MarkFileAsViewedInput'),
+    directives: [],
+    fields: [
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'clientMutationId'),
+          directives: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false),
+          defaultValue: null),
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'path'),
+          directives: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true),
+          defaultValue: null),
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'pullRequestId'),
+          directives: [
+            _i1.DirectiveNode(
+                name: _i1.NameNode(value: 'possibleTypes'),
+                arguments: [
+                  _i1.ArgumentNode(
+                      name: _i1.NameNode(value: 'concreteTypes'),
+                      value: _i1.ListValueNode(values: [
+                        _i1.StringValueNode(
+                            value: 'PullRequest', isBlock: false)
+                      ]))
+                ])
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'ID'), isNonNull: true),
+          defaultValue: null)
+    ]);
+const MarkFileAsViewedPayload = _i1.ObjectTypeDefinitionNode(
+    name: _i1.NameNode(value: 'MarkFileAsViewedPayload'),
+    directives: [],
+    interfaces: [],
+    fields: [
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'clientMutationId'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'pullRequest'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'PullRequest'), isNonNull: false))
+    ]);
 const MarkPullRequestReadyForReviewInput = _i1.InputObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'MarkPullRequestReadyForReviewInput'),
     directives: [],
@@ -17701,17 +17991,37 @@ const MarkedAsDuplicateEvent = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Actor'), isNonNull: false)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'canonical'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'IssueOrPullRequest'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'createdAt'),
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'DateTime'), isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'duplicate'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'IssueOrPullRequest'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'id'),
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
-              name: _i1.NameNode(value: 'ID'), isNonNull: true))
+              name: _i1.NameNode(value: 'ID'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isCrossRepository'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true))
     ]);
 const MarketplaceCategory = _i1.ObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'MarketplaceCategory'),
@@ -18695,6 +19005,12 @@ const MergeBranchInput = _i1.InputObjectTypeDefinitionNode(
     directives: [],
     fields: [
       _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'authorEmail'),
+          directives: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false),
+          defaultValue: null),
+      _i1.InputValueDefinitionNode(
           name: _i1.NameNode(value: 'base'),
           directives: [],
           type: _i1.NamedTypeNode(
@@ -18757,6 +19073,12 @@ const MergePullRequestInput = _i1.InputObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'MergePullRequestInput'),
     directives: [],
     fields: [
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'authorEmail'),
+          directives: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false),
+          defaultValue: null),
       _i1.InputValueDefinitionNode(
           name: _i1.NameNode(value: 'clientMutationId'),
           directives: [],
@@ -18843,7 +19165,19 @@ const MergeStateStatus = _i1.EnumTypeDefinitionNode(
       _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'DIRTY'), directives: []),
       _i1.EnumValueDefinitionNode(
-          name: _i1.NameNode(value: 'DRAFT'), directives: []),
+          name: _i1.NameNode(value: 'DRAFT'),
+          directives: [
+            _i1.DirectiveNode(
+                name: _i1.NameNode(value: 'deprecated'),
+                arguments: [
+                  _i1.ArgumentNode(
+                      name: _i1.NameNode(value: 'reason'),
+                      value: _i1.StringValueNode(
+                          value:
+                              'DRAFT state will be removed from this enum and `isDraft` should be used instead Use PullRequest.isDraft instead. Removal on 2021-01-01 UTC.',
+                          isBlock: false))
+                ])
+          ]),
       _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'HAS_HOOKS'), directives: []),
       _i1.EnumValueDefinitionNode(
@@ -20573,6 +20907,21 @@ const Mutation = _i1.ObjectTypeDefinitionNode(
               name: _i1.NameNode(value: 'LockLockablePayload'),
               isNonNull: false)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'markFileAsViewed'),
+          directives: [],
+          args: [
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'input'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'MarkFileAsViewedInput'),
+                    isNonNull: true),
+                defaultValue: null)
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'MarkFileAsViewedPayload'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'markPullRequestReadyForReview'),
           directives: [],
           args: [
@@ -21016,6 +21365,21 @@ const Mutation = _i1.ObjectTypeDefinitionNode(
           ],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'UnlockLockablePayload'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'unmarkFileAsViewed'),
+          directives: [],
+          args: [
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'input'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'UnmarkFileAsViewedInput'),
+                    isNonNull: true),
+                defaultValue: null)
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'UnmarkFileAsViewedPayload'),
               isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'unmarkIssueAsDuplicate'),
@@ -25664,7 +26028,19 @@ const OrgUpdateMemberRepositoryCreationPermissionAuditEntryVisibility =
       _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'ALL'), directives: []),
       _i1.EnumValueDefinitionNode(
-          name: _i1.NameNode(value: 'PUBLIC'), directives: [])
+          name: _i1.NameNode(value: 'INTERNAL'), directives: []),
+      _i1.EnumValueDefinitionNode(
+          name: _i1.NameNode(value: 'NONE'), directives: []),
+      _i1.EnumValueDefinitionNode(
+          name: _i1.NameNode(value: 'PRIVATE'), directives: []),
+      _i1.EnumValueDefinitionNode(
+          name: _i1.NameNode(value: 'PRIVATE_INTERNAL'), directives: []),
+      _i1.EnumValueDefinitionNode(
+          name: _i1.NameNode(value: 'PUBLIC'), directives: []),
+      _i1.EnumValueDefinitionNode(
+          name: _i1.NameNode(value: 'PUBLIC_INTERNAL'), directives: []),
+      _i1.EnumValueDefinitionNode(
+          name: _i1.NameNode(value: 'PUBLIC_PRIVATE'), directives: [])
     ]);
 const OrgUpdateMemberRepositoryInvitationPermissionAuditEntry =
     _i1.ObjectTypeDefinitionNode(
@@ -30353,6 +30729,76 @@ const PullRequest = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'DateTime'), isNonNull: false)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'latestOpinionatedReviews'),
+          directives: [],
+          args: [
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'after'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'String'), isNonNull: false),
+                defaultValue: null),
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'before'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'String'), isNonNull: false),
+                defaultValue: null),
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'first'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'Int'), isNonNull: false),
+                defaultValue: null),
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'last'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'Int'), isNonNull: false),
+                defaultValue: null),
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'writersOnly'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'Boolean'), isNonNull: false),
+                defaultValue: _i1.BooleanValueNode(value: false))
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'PullRequestReviewConnection'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'latestReviews'),
+          directives: [],
+          args: [
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'after'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'String'), isNonNull: false),
+                defaultValue: null),
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'before'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'String'), isNonNull: false),
+                defaultValue: null),
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'first'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'Int'), isNonNull: false),
+                defaultValue: null),
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'last'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'Int'), isNonNull: false),
+                defaultValue: null)
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'PullRequestReviewConnection'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'locked'),
           directives: [],
           args: [],
@@ -30883,6 +31329,12 @@ const PullRequest = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'viewerCanDeleteHeadRef'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'viewerCanReact'),
           directives: [],
           args: [],
@@ -30915,6 +31367,34 @@ const PullRequest = _i1.ObjectTypeDefinitionNode(
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'viewerMergeBodyText'),
+          directives: [],
+          args: [
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'mergeType'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'PullRequestMergeMethod'),
+                    isNonNull: false),
+                defaultValue: null)
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'viewerMergeHeadlineText'),
+          directives: [],
+          args: [
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'mergeType'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'PullRequestMergeMethod'),
+                    isNonNull: false),
+                defaultValue: null)
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'viewerSubscription'),
           directives: [],
@@ -31353,6 +31833,12 @@ const PullRequestReview = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'CommentAuthorAssociation'),
               isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'authorCanPushToRepository'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'body'),
           directives: [],
@@ -32259,6 +32745,18 @@ const PullRequestReviewThread = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'ID'), isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isCollapsed'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isOutdated'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'isResolved'),
           directives: [],
           args: [],
@@ -32282,6 +32780,12 @@ const PullRequestReviewThread = _i1.ObjectTypeDefinitionNode(
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Int'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'path'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'pullRequest'),
           directives: [],
@@ -32312,6 +32816,12 @@ const PullRequestReviewThread = _i1.ObjectTypeDefinitionNode(
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Int'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'viewerCanReply'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'viewerCanResolve'),
           directives: [],
@@ -32458,6 +32968,8 @@ const PullRequestTimelineItem = _i1.UnionTypeDefinitionNode(
       _i1.NamedTypeNode(
           name: _i1.NameNode(value: 'AssignedEvent'), isNonNull: false),
       _i1.NamedTypeNode(
+          name: _i1.NameNode(value: 'BaseRefDeletedEvent'), isNonNull: false),
+      _i1.NamedTypeNode(
           name: _i1.NameNode(value: 'BaseRefForcePushedEvent'),
           isNonNull: false),
       _i1.NamedTypeNode(
@@ -32560,6 +33072,8 @@ const PullRequestTimelineItems = _i1.UnionTypeDefinitionNode(
           isNonNull: false),
       _i1.NamedTypeNode(
           name: _i1.NameNode(value: 'BaseRefChangedEvent'), isNonNull: false),
+      _i1.NamedTypeNode(
+          name: _i1.NameNode(value: 'BaseRefDeletedEvent'), isNonNull: false),
       _i1.NamedTypeNode(
           name: _i1.NameNode(value: 'BaseRefForcePushedEvent'),
           isNonNull: false),
@@ -32752,6 +33266,8 @@ const PullRequestTimelineItemsItemType = _i1.EnumTypeDefinitionNode(
           directives: []),
       _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'BASE_REF_CHANGED_EVENT'), directives: []),
+      _i1.EnumValueDefinitionNode(
+          name: _i1.NameNode(value: 'BASE_REF_DELETED_EVENT'), directives: []),
       _i1.EnumValueDefinitionNode(
           name: _i1.NameNode(value: 'BASE_REF_FORCE_PUSHED_EVENT'),
           directives: []),
@@ -33659,7 +34175,13 @@ const RateLimit = _i1.ObjectTypeDefinitionNode(
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
-              name: _i1.NameNode(value: 'DateTime'), isNonNull: true))
+              name: _i1.NameNode(value: 'DateTime'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'used'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Int'), isNonNull: true))
     ]);
 const Reactable = _i1.InterfaceTypeDefinitionNode(
     name: _i1.NameNode(value: 'Reactable'),
@@ -34156,7 +34678,7 @@ const Ref = _i1.ObjectTypeDefinitionNode(
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
-              name: _i1.NameNode(value: 'GitObject'), isNonNull: true))
+              name: _i1.NameNode(value: 'GitObject'), isNonNull: false))
     ]);
 const RefConnection = _i1.ObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'RefConnection'),
@@ -38678,6 +39200,15 @@ const Repository = _i1.ObjectTypeDefinitionNode(
               name: _i1.NameNode(value: 'CommitCommentConnection'),
               isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'contactLinks'),
+          directives: [],
+          args: [],
+          type: _i1.ListTypeNode(
+              type: _i1.NamedTypeNode(
+                  name: _i1.NameNode(value: 'RepositoryContactLink'),
+                  isNonNull: true),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'createdAt'),
           directives: [],
           args: [],
@@ -38988,7 +39519,19 @@ const Repository = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isBlankIssuesEnabled'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'isDisabled'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isEmpty'),
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
@@ -39017,6 +39560,12 @@ const Repository = _i1.ObjectTypeDefinitionNode(
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isSecurityPolicyEnabled'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'isTemplate'),
           directives: [],
@@ -39049,6 +39598,14 @@ const Repository = _i1.ObjectTypeDefinitionNode(
           ],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'IssueOrPullRequest'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'issueTemplates'),
+          directives: [],
+          args: [],
+          type: _i1.ListTypeNode(
+              type: _i1.NamedTypeNode(
+                  name: _i1.NameNode(value: 'IssueTemplate'), isNonNull: true),
               isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'issues'),
@@ -39318,6 +39875,12 @@ const Repository = _i1.ObjectTypeDefinitionNode(
                 type: _i1.NamedTypeNode(
                     name: _i1.NameNode(value: 'MilestoneOrder'),
                     isNonNull: false),
+                defaultValue: null),
+            _i1.InputValueDefinitionNode(
+                name: _i1.NameNode(value: 'query'),
+                directives: [],
+                type: _i1.NamedTypeNode(
+                    name: _i1.NameNode(value: 'String'), isNonNull: false),
                 defaultValue: null),
             _i1.InputValueDefinitionNode(
                 name: _i1.NameNode(value: 'states'),
@@ -39828,6 +40391,12 @@ const Repository = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'URI'), isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'securityPolicyUrl'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'URI'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'shortDescriptionHTML'),
           directives: [],
           args: [
@@ -39977,6 +40546,19 @@ const Repository = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'viewerDefaultCommitEmail'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'viewerDefaultMergeMethod'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'PullRequestMergeMethod'),
+              isNonNull: true)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'viewerHasStarred'),
           directives: [],
           args: [],
@@ -39988,6 +40570,14 @@ const Repository = _i1.ObjectTypeDefinitionNode(
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'RepositoryPermission'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'viewerPossibleCommitEmails'),
+          directives: [],
+          args: [],
+          type: _i1.ListTypeNode(
+              type: _i1.NamedTypeNode(
+                  name: _i1.NameNode(value: 'String'), isNonNull: true),
               isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'viewerSubscription'),
@@ -40210,6 +40800,30 @@ const RepositoryConnection = _i1.ObjectTypeDefinitionNode(
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Int'), isNonNull: true))
+    ]);
+const RepositoryContactLink = _i1.ObjectTypeDefinitionNode(
+    name: _i1.NameNode(value: 'RepositoryContactLink'),
+    directives: [],
+    interfaces: [],
+    fields: [
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'about'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'name'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'url'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'URI'), isNonNull: true))
     ]);
 const RepositoryContributionType = _i1.EnumTypeDefinitionNode(
     name: _i1.NameNode(value: 'RepositoryContributionType'),
@@ -47040,6 +47654,18 @@ const TreeEntry = _i1.ObjectTypeDefinitionNode(
     interfaces: [],
     fields: [
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'extension'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isGenerated'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'mode'),
           directives: [],
           args: [],
@@ -47063,6 +47689,12 @@ const TreeEntry = _i1.ObjectTypeDefinitionNode(
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'GitObjectID'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'path'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
       _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'repository'),
           directives: [],
@@ -47491,6 +48123,58 @@ const UnlockedEvent = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Lockable'), isNonNull: true))
     ]);
+const UnmarkFileAsViewedInput = _i1.InputObjectTypeDefinitionNode(
+    name: _i1.NameNode(value: 'UnmarkFileAsViewedInput'),
+    directives: [],
+    fields: [
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'clientMutationId'),
+          directives: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false),
+          defaultValue: null),
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'path'),
+          directives: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true),
+          defaultValue: null),
+      _i1.InputValueDefinitionNode(
+          name: _i1.NameNode(value: 'pullRequestId'),
+          directives: [
+            _i1.DirectiveNode(
+                name: _i1.NameNode(value: 'possibleTypes'),
+                arguments: [
+                  _i1.ArgumentNode(
+                      name: _i1.NameNode(value: 'concreteTypes'),
+                      value: _i1.ListValueNode(values: [
+                        _i1.StringValueNode(
+                            value: 'PullRequest', isBlock: false)
+                      ]))
+                ])
+          ],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'ID'), isNonNull: true),
+          defaultValue: null)
+    ]);
+const UnmarkFileAsViewedPayload = _i1.ObjectTypeDefinitionNode(
+    name: _i1.NameNode(value: 'UnmarkFileAsViewedPayload'),
+    directives: [],
+    interfaces: [],
+    fields: [
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'clientMutationId'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'pullRequest'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'PullRequest'), isNonNull: false))
+    ]);
 const UnmarkIssueAsDuplicateInput = _i1.InputObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'UnmarkIssueAsDuplicateInput'),
     directives: [],
@@ -47579,17 +48263,37 @@ const UnmarkedAsDuplicateEvent = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'Actor'), isNonNull: false)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'canonical'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'IssueOrPullRequest'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'createdAt'),
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'DateTime'), isNonNull: true)),
       _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'duplicate'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'IssueOrPullRequest'),
+              isNonNull: false)),
+      _i1.FieldDefinitionNode(
           name: _i1.NameNode(value: 'id'),
           directives: [],
           args: [],
           type: _i1.NamedTypeNode(
-              name: _i1.NameNode(value: 'ID'), isNonNull: true))
+              name: _i1.NameNode(value: 'ID'), isNonNull: true)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'isCrossRepository'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: true))
     ]);
 const UnminimizeCommentInput = _i1.InputObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'UnminimizeCommentInput'),
@@ -52240,6 +52944,30 @@ const UserEdge = _i1.ObjectTypeDefinitionNode(
           type: _i1.NamedTypeNode(
               name: _i1.NameNode(value: 'User'), isNonNull: false))
     ]);
+const UserEmailMetadata = _i1.ObjectTypeDefinitionNode(
+    name: _i1.NameNode(value: 'UserEmailMetadata'),
+    directives: [],
+    interfaces: [],
+    fields: [
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'primary'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'Boolean'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'type'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: false)),
+      _i1.FieldDefinitionNode(
+          name: _i1.NameNode(value: 'value'),
+          directives: [],
+          args: [],
+          type: _i1.NamedTypeNode(
+              name: _i1.NameNode(value: 'String'), isNonNull: true))
+    ]);
 const UserStatus = _i1.ObjectTypeDefinitionNode(
     name: _i1.NameNode(value: 'UserStatus'),
     directives: [],
@@ -52459,6 +53187,7 @@ const document = _i1.DocumentNode(definitions: [
   AutomaticBaseChangeFailedEvent,
   AutomaticBaseChangeSucceededEvent,
   BaseRefChangedEvent,
+  BaseRefDeletedEvent,
   BaseRefForcePushedEvent,
   Blame,
   BlameRange,
@@ -52779,6 +53508,7 @@ const document = _i1.DocumentNode(definitions: [
   IssueOrder,
   IssueOrderField,
   IssueState,
+  IssueTemplate,
   IssueTimelineConnection,
   IssueTimelineItem,
   IssueTimelineItemEdge,
@@ -52809,6 +53539,8 @@ const document = _i1.DocumentNode(definitions: [
   Lockable,
   LockedEvent,
   Mannequin,
+  MarkFileAsViewedInput,
+  MarkFileAsViewedPayload,
   MarkPullRequestReadyForReviewInput,
   MarkPullRequestReadyForReviewPayload,
   MarkedAsDuplicateEvent,
@@ -53104,6 +53836,7 @@ const document = _i1.DocumentNode(definitions: [
   RepositoryCollaboratorConnection,
   RepositoryCollaboratorEdge,
   RepositoryConnection,
+  RepositoryContactLink,
   RepositoryContributionType,
   RepositoryEdge,
   RepositoryInfo,
@@ -53277,6 +54010,8 @@ const document = _i1.DocumentNode(definitions: [
   UnlockLockableInput,
   UnlockLockablePayload,
   UnlockedEvent,
+  UnmarkFileAsViewedInput,
+  UnmarkFileAsViewedPayload,
   UnmarkIssueAsDuplicateInput,
   UnmarkIssueAsDuplicatePayload,
   UnmarkedAsDuplicateEvent,
@@ -53376,6 +54111,7 @@ const document = _i1.DocumentNode(definitions: [
   UserContentEditConnection,
   UserContentEditEdge,
   UserEdge,
+  UserEmailMetadata,
   UserStatus,
   UserStatusConnection,
   UserStatusEdge,
