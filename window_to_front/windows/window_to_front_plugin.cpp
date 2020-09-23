@@ -1,3 +1,17 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "include/window_to_front/window_to_front_plugin.h"
 
 // This must be included before many other Windows headers.
@@ -9,7 +23,6 @@
 
 #include <map>
 #include <memory>
-#include <sstream>
 
 namespace {
 
@@ -25,7 +38,7 @@ class WindowToFrontPlugin : public flutter::Plugin {
   // Called when a method is called on this plugin's channel from Dart.
   void HandleMethodCall(
       const flutter::MethodCall<flutter::EncodableValue> &method_call,
-      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
+      std::unique_ptr<flutter::MethodResult<>> result);
 
   // The registrar for this plugin, for accessing the window.
   flutter::PluginRegistrarWindows *registrar_;
@@ -35,7 +48,7 @@ class WindowToFrontPlugin : public flutter::Plugin {
 void WindowToFrontPlugin::RegisterWithRegistrar(
     flutter::PluginRegistrarWindows *registrar) {
   auto channel =
-      std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+      std::make_unique<flutter::MethodChannel<>>(
           registrar->messenger(), "window_to_front",
           &flutter::StandardMethodCodec::GetInstance());
 
@@ -55,8 +68,8 @@ WindowToFrontPlugin::WindowToFrontPlugin(flutter::PluginRegistrarWindows *regist
 WindowToFrontPlugin::~WindowToFrontPlugin() {}
 
 void WindowToFrontPlugin::HandleMethodCall(
-    const flutter::MethodCall<flutter::EncodableValue> &method_call,
-    std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+    const flutter::MethodCall<> &method_call,
+    std::unique_ptr<flutter::MethodResult<>> result) {
   if (method_call.method_name().compare("activate") == 0) {
     // See https://stackoverflow.com/a/34414846/2142626 for an explanation of how 
     // this raises a window to the foreground. 
@@ -71,7 +84,7 @@ void WindowToFrontPlugin::HandleMethodCall(
     ::SetFocus(m_hWnd);
     ::SetActiveWindow(m_hWnd);
     ::AttachThreadInput(dwCurID, dwMyID, FALSE);
-    result->Success(flutter::EncodableValue(nullptr));
+    result->Success();
   } else {
     result->NotImplemented();
   }
