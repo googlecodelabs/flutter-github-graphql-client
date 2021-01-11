@@ -1,4 +1,9 @@
-# Flutter Github GraphQL Client
+# Deprecated
+
+This repository has been migrated to [github.com/flutter/codelabs](https://github.com/flutter/codelabs/tree/master/github-graphql-client). 
+This repository will no longer be maintained.
+
+## Flutter Github GraphQL Client
 
 A Flutter desktop Github client using Github API v4 (GraphQL). This repository is the code behind the
 [Write a Flutter desktop application](https://codelabs.developers.google.com/codelabs/flutter-github-graphql-client/#0)
